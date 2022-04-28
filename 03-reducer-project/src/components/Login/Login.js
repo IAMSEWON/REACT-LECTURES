@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  useContext,
+  useRef,
+} from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -43,6 +49,9 @@ const Login = (props) => {
     isValid: null,
   });
   const authCtx = useContext(AuthContext);
+
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
 
   useEffect(() => {
     console.log("EFFECT RUNNING");
@@ -89,12 +98,12 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    if(formIsValid){
+    if (formIsValid) {
       authCtx.onLogin(emailState.value, passwordState.value);
-    } else if(!emailIsValid){
-      
+    } else if (!emailIsValid) {
+      emailInputRef.current.focus();
     } else {
-      
+      passwordInputRef.current.focus();
     }
   };
 
@@ -102,6 +111,7 @@ const Login = (props) => {
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <Input
+          ref={emailInputRef}
           id="email"
           label="E-Mail"
           type="email"
@@ -111,6 +121,7 @@ const Login = (props) => {
           onBlur={validateEmailHandler}
         />
         <Input
+          ref={passwordInputRef}
           id="password"
           label="Password"
           type="password"
